@@ -1,0 +1,2 @@
+tkcalendar==1.6.1
+babel>=2.6.0
