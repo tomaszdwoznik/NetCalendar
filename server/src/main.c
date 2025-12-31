@@ -11,7 +11,7 @@
 int main(int argc, char* argv[]) {
   cJSON* db = load_database();
   SSL_CTX* ctx =
-      init_ssl_context("../resources/server.crt", "../resources/server.key");
+      init_ssl_context("server/resources/server.crt", "server/resources/server.key");
   if (ctx == NULL) {
     fprintf(stderr, "Nie udało się zainicjować SSL\n");
     return -1;

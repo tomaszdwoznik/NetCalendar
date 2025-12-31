@@ -6,7 +6,7 @@
 #include <sys/select.h>
 
 cJSON* load_database() {
-  FILE* f = fopen("../resources/calendar.json", "rb");
+  FILE* f = fopen("server/resources/calendar.json", "rb");
   if (!f) {
     return cJSON_CreateArray();
   }
