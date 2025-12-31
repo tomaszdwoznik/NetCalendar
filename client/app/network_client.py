@@ -9,6 +9,7 @@ class NetworkClient:
         self.client_socket = None
         self.is_connected = False
 
+    # nawiazanie polaczenia SSL z serwerem oraz uruchomienie petli odbioru w tle
     def connect(self, host, port, callback):
         try:
             current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +31,7 @@ class NetworkClient:
             print(f"Błąd połączenia: {e}")
             return False
 
+    # petla odbierajaca dane, dopoki polaczenie jest aktywne
     def _receive_loop(self, callback):
         while self.is_connected:
             try:
@@ -41,6 +43,7 @@ class NetworkClient:
                 break
         self.disconnect()
 
+    # wyslanie wiadomosci 
     def send_message(self, message):
         if self.is_connected:
             try:
@@ -48,11 +51,13 @@ class NetworkClient:
             except Exception as e:
                 print(f"Błąd wysyłania: {e}")
 
+    # rozlaczenie z serwerem
     def disconnect(self):
         self.is_connected = False
         if self.client_socket:
             self.client_socket.close()
 
+    # wyslanie zapytania w JSON do serwera
     def send_json(self, data_dict):
         if self.is_connected:
             try:

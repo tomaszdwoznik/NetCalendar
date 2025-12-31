@@ -5,11 +5,13 @@
 #include <string.h>
 #include <sys/select.h>
 
+// wczytanie pliku calendar.json przy uzyciu struktury cJSON
 cJSON* load_database() {
   FILE* f = fopen("server/resources/calendar.json", "rb");
   if (!f) {
     return cJSON_CreateArray();
   }
+  // pobieranie dlugosci pliku
   fseek(f, 0, SEEK_END);
   long len = ftell(f);
   fseek(f, 0, SEEK_SET);
@@ -25,6 +27,7 @@ cJSON* load_database() {
   return json;
 }
 
+// zapis danych do pliku calendar.json
 void save_database(cJSON* db) {
   char* string = cJSON_Print(db);
   FILE* f = fopen("../resources/calendar.json", "w");
@@ -35,6 +38,7 @@ void save_database(cJSON* db) {
   free(string);
 }
 
+// tworzenie nowego obiektu wydarzenia na podstawie inputu od klienta
 void add_event_to_db(const char* date, const char* time, const char* title,
                      cJSON* db) {
   cJSON* new_event = cJSON_CreateObject();
@@ -46,6 +50,7 @@ void add_event_to_db(const char* date, const char* time, const char* title,
   save_database(db);
 }
 
+// zwracanie wydarzen na podstawie inputu od klienta
 cJSON* get_events_by_date(const char* target_date, cJSON* db) {
   cJSON* filtered_array = cJSON_CreateArray();
   cJSON* event = NULL;
@@ -54,6 +59,7 @@ cJSON* get_events_by_date(const char* target_date, cJSON* db) {
   cJSON_ArrayForEach(event, db) {
     cJSON* date_item = cJSON_GetObjectItemCaseSensitive(event, "date");
     if (cJSON_IsString(date_item) && (date_item->valuestring != NULL)) {
+	// sprawdzanie czy data pasuje do zapytania
       if (strncmp(date_item->valuestring, target_date, target_len) == 0) {
         cJSON_AddItemToArray(filtered_array, cJSON_Duplicate(event, 1));
       }
@@ -62,6 +68,7 @@ cJSON* get_events_by_date(const char* target_date, cJSON* db) {
   return filtered_array;
 }
 
+// sprawdzanie czy jakies inne wydarzenie o tej samej dacie i godzinie juz wystepuje w calendar.json
 int is_event_duplicate(cJSON* db, const char* date, const char* time) {
   cJSON* event = NULL;
   cJSON_ArrayForEach(event, db) {
@@ -78,6 +85,7 @@ int is_event_duplicate(cJSON* db, const char* date, const char* time) {
   return 0;
 }
 
+// walidacja daty poprzez sprawdzanie zakresow oraz ilosci dni w miesiacu
 bool is_valid_date(const char* date_str) {
   int year, month, day;
   int scanned = sscanf(date_str, "%d-%d-%d", &year, &month, &day);
@@ -96,6 +104,7 @@ bool is_valid_date(const char* date_str) {
   return false;
 }
 
+// walidacja godziny
 bool is_valid_time(const char* time_str) {
   int hours, minutes;
   if (sscanf(time_str, "%d:%d", &hours, &minutes) != 2) return false;

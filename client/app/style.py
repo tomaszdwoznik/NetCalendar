@@ -1,3 +1,4 @@
+# przechowywanie palety kolorow stosowanej w UI aplikacji 
 class color:
 	style = {
 		"bg_main": "#F0F2F5",       

@@ -6,11 +6,13 @@
 #include <sys/select.h>
 #include <unistd.h>
 
+// ustawienie gniazda w tryb nieblokujacy 
 void setNonBlock(int fd) {
   int flags = fcntl(fd, F_GETFL, 0);
   fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 }
 
+// przygotowanie struktury adresowej
 int setup_addr(struct sockaddr_in* addr) {
   memset(addr, 0, sizeof(*addr));
   addr->sin_family = AF_INET;
@@ -19,6 +21,7 @@ int setup_addr(struct sockaddr_in* addr) {
   return 0;
 }
 
+// tworzenie i konfiguracja gniazda sieciowego
 int make_listen_socket(struct sockaddr_in* addr) {
   int on = 1;
   int sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -43,6 +46,7 @@ int make_listen_socket(struct sockaddr_in* addr) {
   return sfd;
 }
 
+// inicjalizacja masek dla funkcji select()
 void init_selector(int sfd, fd_set* rmask, fd_set* wmask, int* fdmax) {
   FD_ZERO(rmask);
   FD_ZERO(wmask);
@@ -50,6 +54,7 @@ void init_selector(int sfd, fd_set* rmask, fd_set* wmask, int* fdmax) {
   *fdmax = sfd;
 }
 
+// dokladne i bezstratne czytanie danych 
 int buf_read(int sfd, char* buf, int bufsize) {
   int rc = 0;
   do {

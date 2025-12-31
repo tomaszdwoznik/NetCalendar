@@ -4,6 +4,7 @@
 #include <sys/select.h>
 #include <unistd.h>
 
+// inicjalizacja biblioteki SSL oraz zaladowanie certyfikatu oraz kluczu prywatnego serwera
 SSL_CTX* init_ssl_context(const char* cert_file, const char* key_file) {
   SSL_library_init();
   SSL_load_error_strings();
@@ -30,6 +31,7 @@ SSL_CTX* init_ssl_context(const char* cert_file, const char* key_file) {
   return ctx;
 }
 
+// zamkniecie polaczenia SSL, zamkniecie gniazda sieciowego oraz czyszczenie struktury stanow uzytkownika
 void close_ssl_connection(int fd, fd_set* main_rmask) {
   if (states[fd].ssl != NULL) {
     SSL_shutdown(states[fd].ssl);
@@ -44,6 +46,7 @@ void close_ssl_connection(int fd, fd_set* main_rmask) {
   printf("Połączenie %d zamknięte.\n", fd);
 }
 
+// dokladne i bezstratne czytanie zaszyfrowanych przez SSL danych 
 int ssl_buf_read(SSL* ssl, char* buf, int bufsize) {
   if (ssl == NULL) return -1;
 

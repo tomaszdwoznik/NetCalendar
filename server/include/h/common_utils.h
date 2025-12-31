@@ -24,6 +24,5 @@ struct user_state {
 extern struct user_state states[MAX_FD];
 
 void init_all_states();
-void broadcast_json(int sender_fd, const char* message, int fdmax);
 
 #endif  // INCLUDE_H_COMMON_UTILS_H_  
