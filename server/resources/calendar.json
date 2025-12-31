@@ -9,6 +9,73 @@
 	}, {
 		"date":	"2026-01-25",
 		"time":	"15:30",
-		"title":	"Nowe spotkanie"
-	}
-]
+		"title":	"Planowanie zadań"
+	}, {
+		"date":	"2026-01-25",
+		"time":	"17:30",
+		"title":	"Zakupy"
+	}, {
+		"date":	"2026-01-10",
+		"time":	"15:00",
+		"title":	"Odpoczynek"
+	}, {
+		"date":	"2025-12-31",
+		"time":	"23:59",
+		"title":	"Sylwester"
+	}, {
+		"date":	"2025-12-27",
+		"time":	"12:00",
+		"title":	"Lunch"
+	}, {
+		"date":	"2025-12-28",
+		"time":	"12:00",
+		"title":	"Meeting"
+	}, {
+		"date":	"2026-02-18",
+		"time":	"12:00",
+		"title":	"Testowanie oprogramowania"
+	}, {
+		"date":	"2026-02-05",
+		"time":	"12:00",
+		"title":	"Spotkanie grupowe"
+	}, {
+		"date":	"2026-03-20",
+		"time":	"12:00",
+		"title":	"Kurs - egzamin"
+	}, {
+		"date":	"2026-03-24",
+		"time":	"12:00",
+		"title":	"Podsumowanie pracy"
+	}, {
+		"date":	"2025-12-25",
+		"time":	"12:00",
+		"title":	"Dentysta"
+	}, {
+		"date":	"2025-12-26",
+		"time":	"12:00",
+		"title":	"Mechanik"
+	}, {
+		"date":	"2025-12-20",
+		"time":	"12:00",
+		"title":	"Status projektu"
+	}, {
+		"date":	"2025-12-11",
+		"time":	"12:00",
+		"title":	"Odebrać paczkę"
+	}, {
+		"date":	"2025-12-16",
+		"time":	"19:00",
+		"title":	"Testowanie oprogramowania"
+	}, {
+		"date":	"2025-12-30",
+		"time":	"16:00",
+		"title":	"Praca nad kalendarzem"
+	}, {
+		"date":	"2025-12-24",
+		"time":	"17:00",
+		"title":	"WIGILIA!"
+	}, {
+		"date":	"2025-12-13",
+		"time":	"16:00",
+		"title":	"Wolne"
+	}]
