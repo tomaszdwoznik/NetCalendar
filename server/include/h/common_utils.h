@@ -10,18 +10,21 @@
 
 #define MAX_FD 64
 
-struct user_map {
+struct user_map
+{
     int id;
     char name[50];
 };
 
-struct user_state {
-    int state; 
-    char response_buf[256]; 
+struct user_state
+{
+    int state;
+    char response_buf[256];
     SSL *ssl;
 };
 
 void init_all_states();
+void broadcast_json(int sender_fd, const char *message, int fdmax);
 
 extern struct user_state states[MAX_FD];
 

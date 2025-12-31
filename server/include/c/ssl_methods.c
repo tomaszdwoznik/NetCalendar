@@ -3,7 +3,8 @@
 #include <unistd.h>
 #include <sys/select.h>
 
-SSL_CTX* init_ssl_context(const char* cert_file, const char* key_file) {
+SSL_CTX *init_ssl_context(const char *cert_file, const char *key_file)
+{
     const SSL_METHOD *method;
     SSL_CTX *ctx;
 
@@ -13,18 +14,21 @@ SSL_CTX* init_ssl_context(const char* cert_file, const char* key_file) {
 
     method = TLS_server_method();
     ctx = SSL_CTX_new(method);
-    
-    if (!ctx) {
+
+    if (!ctx)
+    {
         perror("Błąd: Nie można stworzyć kontekstu SSL");
         return NULL;
     }
 
-    if (SSL_CTX_use_certificate_file(ctx, cert_file, SSL_FILETYPE_PEM) <= 0) {
+    if (SSL_CTX_use_certificate_file(ctx, cert_file, SSL_FILETYPE_PEM) <= 0)
+    {
         ERR_print_errors_fp(stderr);
         return NULL;
     }
 
-    if (SSL_CTX_use_PrivateKey_file(ctx, key_file, SSL_FILETYPE_PEM) <= 0) {
+    if (SSL_CTX_use_PrivateKey_file(ctx, key_file, SSL_FILETYPE_PEM) <= 0)
+    {
         ERR_print_errors_fp(stderr);
         return NULL;
     }
@@ -32,8 +36,10 @@ SSL_CTX* init_ssl_context(const char* cert_file, const char* key_file) {
     return ctx;
 }
 
-void close_ssl_connection(int fd, fd_set *main_rmask) {
-    if (states[fd].ssl != NULL) {
+void close_ssl_connection(int fd, fd_set *main_rmask)
+{
+    if (states[fd].ssl != NULL)
+    {
         SSL_shutdown(states[fd].ssl);
         SSL_free(states[fd].ssl);
         states[fd].ssl = NULL;
@@ -46,16 +52,20 @@ void close_ssl_connection(int fd, fd_set *main_rmask) {
     printf("Połączenie %d zamknięte.\n", fd);
 }
 
-int ssl_buf_read(SSL *ssl, char *buf, int bufsize) {
-    if (ssl == NULL) return -1;
+int ssl_buf_read(SSL *ssl, char *buf, int bufsize)
+{
+    if (ssl == NULL)
+        return -1;
 
     int n = SSL_read(ssl, buf, bufsize);
-    if (n <= 0) {
+    if (n <= 0)
+    {
         int err = SSL_get_error(ssl, n);
-        if (err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE) {
+        if (err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE)
+        {
             return -2;
         }
-        return n; 
+        return n;
     }
     return n;
 }
