@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	cJSON *db = load_database();
 	int sfd, cfd, fdmax, rc, i;
 	struct sockaddr_in saddr, caddr;
 	socklen_t slt = sizeof(caddr);
@@ -68,7 +69,8 @@ int main(int argc, char *argv[])
 				{
 					setNonBlock(cfd);
 					FD_SET(cfd, &main_rmask);
-					if (cfd > fdmax){
+					if (cfd > fdmax)
+					{
 						fdmax = cfd;
 					}
 					states[cfd].state = 1;
@@ -109,22 +111,65 @@ int main(int argc, char *argv[])
 						cJSON *action = cJSON_GetObjectItemCaseSensitive(json, "action");
 						cJSON *json = cJSON_Parse(buf);
 
-						if (strcmp(action->valuestring, "get_events") == 0) {
+						if (strcmp(action->valuestring, "get_events") == 0)
+						{
 							cJSON *date_param = cJSON_GetObjectItemCaseSensitive(json, "date");
-							
-							cJSON *events = get_events_by_date(date_param->valuestring);
-							
-							char *out = cJSON_PrintUnformatted(events);
-							SSL_write(states[i].ssl, out, strlen(out));
 
-							free(out);
+							if (!is_valid_date(date_param->valuestring))
+							{
+								char *error_msg = "Niepoprawna data";
+								SSL_write(states[i].ssl, error_msg, strlen(error_msg));
+							}
+							else
+							{
+								cJSON *events = get_events_by_date(date_param->valuestring, db);
+								char *out = cJSON_PrintUnformatted(events);
+								SSL_write(states[i].ssl, out, strlen(out));
+								free(out);
+							}
 						}
 
+						else if (strcmp(action->valuestring, "add_event") == 0)
+						{
+							cJSON *date_param = cJSON_GetObjectItemCaseSensitive(json, "date");
+							cJSON *time_param = cJSON_GetObjectItemCaseSensitive(json, "time");
+							cJSON *title_param = cJSON_GetObjectItemCaseSensitive(json, "title");
+
+							if (date_param && cJSON_IsString(date_param) && time_param && cJSON_IsString(time_param))
+							{
+								if (!is_valid_date(date_param->valuestring))
+								{
+									char *error_msg = "Niepoprawna data [YYYY-MM-HH]\n";
+									SSL_write(states[i].ssl, error_msg, strlen(error_msg));
+								}
+								else if (!cJSON_IsString(time_param) || !is_valid_time(time_param->valuestring))
+								{
+									char *error_msg = "Niepoprawna godzina [HH:MM]\n";
+									SSL_write(states[i].ssl, error_msg, strlen(error_msg));
+								}
+								else if (is_event_duplicate(db, date_param->valuestring, time_param->valuestring))
+								{
+									char *error_msg = "Ten termin jest już zajęty.\n";
+									SSL_write(states[i].ssl, error_msg, strlen(error_msg));
+								}
+								else
+								{
+
+									add_event_to_db(date_param->valuestring, time_param->valuestring, title_param->valuestring, db);
+								}
+							}
+						}
+						else
+						{
+							char *error_msg = "Niepoprawna akcja ['get_events', 'add_event']";
+							SSL_write(states[i].ssl, error_msg, strlen(error_msg));
+						}
 					}
 				}
 			}
 		}
 	}
+	cJSON_Delete(db);
 	SSL_CTX_free(ctx);
 	return 0;
 }

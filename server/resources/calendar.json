@@ -1,12 +1,14 @@
-[
-  {
-    "date": "2025-05-20",
-    "time": "14:00",
-    "title": "Spotkanie projektowe"
-  },
-  {
-    "date": "2025-05-21",
-    "time": "10:30",
-    "title": "Kompilacja serwera"
-  }
+[{
+		"date":	"2026-01-10",
+		"time":	"14:00",
+		"title":	"Spotkanie projektowe"
+	}, {
+		"date":	"2026-01-04",
+		"time":	"10:30",
+		"title":	"Kompilacja serwera"
+	}, {
+		"date":	"2026-01-25",
+		"time":	"15:30",
+		"title":	"Nowe spotkanie"
+	}
 ]

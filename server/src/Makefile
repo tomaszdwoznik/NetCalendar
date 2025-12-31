@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall 
 LIBS = -lssl -lcrypto -lpthread -ldl
 SRCS = main.c \
        ../include/c/common_utils.c \
